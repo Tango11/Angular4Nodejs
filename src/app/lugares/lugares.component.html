@@ -1,0 +1,48 @@
+ <agm-map [latitude]="lat" [longitude]="lng">
+  <agm-marker  *ngFor="let lugar of lugares" [latitude]="lugar.lat" [longitude]="lugar.lng"></agm-marker>
+</agm-map>
+<hr/>
+<div  [@contenedorAnimable]="state" [@contenedorAnimable.start]="animacionInicia(event)"
+ [@contenedorAnimable.done]="animacionTermina(event)"></div>
+<!-- <a class="btn btn-primary" (click)="animar()">Animar!</a> -->
+<div class="container">
+  <div class="row">
+    <div class="col-md-8">
+      <h2>Lugares Cercanos</h2>
+          <a class="btn btn-primary" routerLink="/crear/new">Crear Nuevo Negocio</a>
+          <ul class="list-group">
+          <ng-container *ngFor="let lugar of lugares">
+           <li class="list-group-item"> <a routerLink="/crear/{{lugar.id}}">{{lugar.nombre | lowercase}}</a>
+        
+            <br/>
+            <small>Creado en: {{lugar.id | date}}</small>
+            <p [innerHtml]="lugar.descripcion | LinkifystrPipe"></p>
+
+           </li>
+          </ng-container>
+          </ul>
+          <ul>
+          <ng-container *ngFor="let lugar of lugares;let i = index" [ngSwitch]="lugar.cercania">
+            <a ><li contar-clicks [ngStyle]="{color:(lugar.active)?'black' : 'gray'}" [ngClass]="{numero_par:(i+1)%2==0}" [resaltar]='lugar.plan' class="list-group-item">{{lugar.nombre}}-
+              <span *ngSwitchCase="1" [ngStyle]="{color: 'green'}">Muy Cercano</span>
+              <span *ngSwitchCase="2" [ngStyle]="{color: 'black'}">Cercano</span>
+              <span *ngSwitchCase="3" [ngStyle]="{color: 'red'}">Lejano</span>
+
+            </li></a>
+          </ng-container>
+          </ul>
+        </div>
+        <div class="col-md-4">
+          <h2>Destacados</h2>
+          <ng-container *ngFor="let lugar of lugares">
+           <li class="bg-warning padding" *ngIf="lugar.plan=='pagado'"> <a routerLink="/crear/{{lugar.id}}">{{lugar.nombre | lowercase}}</a>
+        
+            <br/>
+            <small>Creado en: {{lugar.id | date}}</small>
+            <p [innerHtml]="lugar.descripcion | LinkifystrPipe"></p>
+
+           </li>
+          </ng-container>
+        </div>
+</div>
+</div>
